@@ -1,0 +1,133 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct node
+{
+	int data;
+	struct node* prev;
+	struct node* next;
+};
+typedef struct node * NODE;
+NODE first;
+NODE createNode()
+{
+	NODE temp = (NODE)malloc(sizeof(struct
+	                                node));
+	temp -> next = NULL;
+	temp -> prev = NULL;
+	return temp;
+}
+void insert(int x)
+{
+	NODE last = first;
+	NODE temp = createNode();
+	temp -> data = x;
+	if(first == NULL)
+	{
+		first = temp;
+	}
+	else
+	{
+		while(last -> next != NULL)
+		{
+			last = last -> next;
+		}
+		last -> next = temp;
+		temp -> prev = last;
+	}
+}
+void remov(int key)
+{
+	NODE temp = first;
+	while(temp != NULL)
+	{
+		if(temp -> data == key)
+		{
+			if(temp == first)
+			{
+				first = temp -> next;
+				if(first != NULL)
+				{
+					first -> prev = NULL;
+				}
+			}
+			else
+			{
+				if(temp -> prev != NULL)
+				{
+					temp -> prev -> next =
+					    temp -> next;
+				}
+				if(temp -> next != NULL)
+				{
+					temp -> next -> prev =
+					    temp -> prev;
+				}
+			}
+			free(temp);
+			return;
+		}
+		temp = temp -> next;
+	}
+	printf("%d not found\n", key);
+}
+void display()
+{
+	NODE temp = first;
+	while(temp != NULL)
+	{
+		printf("%d\t", temp -> data);
+		temp = temp -> next;
+	}
+	printf("\n");
+}
+void reverse()
+{
+	NODE curr = first, temp = NULL;
+	if(first == NULL)
+	{
+		return;
+	}
+	while(curr != NULL)
+	{
+		temp = curr -> prev;
+		curr -> prev = curr -> next;
+		curr -> next = temp;
+		curr = curr -> prev;
+	}
+	if(temp != NULL)
+	{
+		first = temp -> prev;
+	}
+}
+int main() {
+	int n, ch;
+	do {
+		printf("Operations on doubly linked
+		       list\n");
+		       printf("1.Insert\n2.Remove\n3.Display\n4.Rev
+		              erse\n0.Exit\n");
+		              printf("Enter Choice 0-4: ");
+		              scanf("%d", &ch);
+		switch (ch) {
+	case 1:
+		printf("Enter number: ");
+			scanf("%d", &n);
+			insert(n);
+			break;
+		case 2:
+			printf("Enter number to
+			       delete: ");
+			       scanf("%d", &n);
+			       remov(n);
+			       break;
+		       case 3:
+				       display();
+				       break;
+			       case 4:
+					       reverse();
+					       printf("List reversed\n");
+					       break;
+				}
+	} while (ch != 0);
+	return 0;
+}
